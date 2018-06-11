@@ -4,7 +4,7 @@ node {
     stage('Build image') {
         /* This builds the actual image; synonymous to docker build on the command line */
 
-        app = docker.build('wazowskis/foo:${env.BUILD_NUMBER}')
+        app = docker.build('wazowskis/foo:${BUILD_NUMBER}')
     }
 
     stage('Test image') {
@@ -17,9 +17,8 @@ node {
 
     stage('Push image') {
         /* Finally, we'll push the image with two tags*/
-        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-wazowskis') {
             app.push()
-            app.push('latest')
         }
     }
 }
