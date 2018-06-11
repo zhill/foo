@@ -24,7 +24,7 @@ node {
   stage('Analyze') {
     // Submit the image to anchore plugin for analysis
     sh 'echo "docker.io/wazowskis/foo:${BUILD_NUMBER} `pwd`/Dockerfile" > anchore_images'
-    anchore name: 'anchore_images'
+    anchore name: 'anchore_images', bailOnFail: false
   }
 
   stage('Cleanup') {
