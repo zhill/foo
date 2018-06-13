@@ -16,10 +16,10 @@ node {
 
   stage('Build') {
     repository = "test_images/foo"
-    tag = "auto_${BUILD_NUMBER}"
+    tag = repository + ":" + "auto_${env.BUILD_ID}"
     // Build the image and push it to a staging repository
     docker.withRegistry("https://registry:5001/v2/") {
-      app = docker.build(repository + ":" + tag)
+      app = docker.build(tag)
       app.push()
     }
   }
@@ -31,7 +31,7 @@ node {
       }
     },
     analyze: {
-      def imagesLine = "registry:5001/" + repository + ":" + tag + " " + dockerfile
+      def imagesLine = "registry:5001/" + tag + " " + dockerfile
       writeFile file: anchorefile, text: imagesLine
       anchore name: anchorefile, bailOnFail: false
     }
