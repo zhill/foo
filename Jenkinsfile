@@ -2,6 +2,8 @@ node {
   def app
   def dockerfile
   def anchorefile
+  def repository
+  def tag
 
   stage('Checkout') {
     // Clone the git repository
@@ -13,9 +15,11 @@ node {
   }
 
   stage('Build') {
+    repository = "test_images/foo"
+    tag = ${BUILD_NUMBER}
     // Build the image and push it to a staging repository
-    docker.withRegistry("https://index.docker.io/v1/", "dockerhub-wazowskis") {
-      app = docker.build("wazowskis/foo:${BUILD_NUMBER}")
+    docker.withRegistry("https://registry:5001/v2/") {
+      app = docker.build("${repository}:${tag}")
       app.push()
     }
   }
@@ -27,7 +31,7 @@ node {
       }
     },
     analyze: {
-      def imagesLine = "docker.io/wazowskis/foo:${BUILD_NUMBER} " + dockerfile
+      def imagesLine = "registry:5001/${repository}:${tag} " + dockerfile
       writeFile file: anchorefile, text: imagesLine
       anchore name: anchorefile, bailOnFail: false
     }
