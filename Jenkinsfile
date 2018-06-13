@@ -16,7 +16,7 @@ node {
 
   stage('Build') {
     repository = "test_images/foo"
-    tag = ${BUILD_NUMBER}
+    tag = "auto_${BUILD_NUMBER}"
     // Build the image and push it to a staging repository
     docker.withRegistry("https://registry:5001/v2/") {
       app = docker.build(repository + ":" + tag)
