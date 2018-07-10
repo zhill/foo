@@ -41,7 +41,7 @@ node {
   stage('Cleanup') {
     // Delete the docker image and clean up any allotted resources
     sh'''
-      docker rmi $(docker images --filter "label=jenkins-demo" -q)
+      docker rmi $(docker images --filter "label=src=jenkins_demo" -q)
     '''
     //  for i in `cat anchore_images | grep foo | awk '{print $1}'`;do docker rmi $i; done
     //'''
