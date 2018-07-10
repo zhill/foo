@@ -31,7 +31,8 @@ node {
       }
     },
     analyze: {
-      def imagesLine = "localhost:5001/" + tag + " " + dockerfile
+      // This is a different url from the push because anchore-engine doesn't use the mounted docker.sock so it needs the actual container name if using docker-compose to run them all.
+      def imagesLine = "registry:5000/" + tag + " " + dockerfile
       writeFile file: anchorefile, text: imagesLine
       anchore name: anchorefile, bailOnFail: false
     }
