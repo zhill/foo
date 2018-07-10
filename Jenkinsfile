@@ -18,7 +18,7 @@ node {
     repository = "test_images/foo"
     tag = repository + ":" + "auto_${env.BUILD_ID}"
     // Build the image and push it to a staging repository
-    docker.withRegistry("https://localhost:5001") {
+    docker.withRegistry("http://localhost:5001") {
       app = docker.build(tag)
       app.push()
     }
@@ -41,7 +41,9 @@ node {
   stage('Cleanup') {
     // Delete the docker image and clean up any allotted resources
     sh'''
-      for i in `cat anchore_images | grep foo | awk '{print $1}'`;do docker rmi $i; done
+      docker rmi $(docker images --filter "label=jenkins-demo" -q)
     '''
+    //  for i in `cat anchore_images | grep foo | awk '{print $1}'`;do docker rmi $i; done
+    //'''
   }
 }
